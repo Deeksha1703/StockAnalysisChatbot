@@ -13,6 +13,17 @@ except Exception as e:
     st.error(f"Error reading the API key: {e}")
 
 def get_stock_price(ticker):
+    """
+    Gets the latest stock price given the ticker symbol of a company.
+
+    Parameters:
+        ticker (str): The stock ticker symbol for a company (e.g., AAPL for Apple).
+
+    Returns:
+        str: The latest stock price as a string.
+             If no data is available for the given ticker symbol, it returns a message.
+             If an error occurs, it returns an error message.
+    """
     try:
         data = yf.Ticker(ticker).history(period='1y')
         if data.empty:
@@ -22,6 +33,17 @@ def get_stock_price(ticker):
         return f"An error occurred: {e}"
 
 def calculate_SMA(ticker, window):
+    """
+    Calculate the simple moving average for a given stock ticker and a window.
+
+    Parameters:
+        ticker (str): The stock ticker symbol for a company (e.g., AAPL for Apple).
+        window (int): The timeframe to consider when calculating the SMA.
+
+    Returns:
+        str: The calculated SMA as a string.
+             If an error occurs, it returns an error message.
+    """
     try:
         data = yf.Ticker(ticker).history(period='1y').Close
         return str(data.rolling(window=window).mean().iloc[-1])
@@ -29,6 +51,17 @@ def calculate_SMA(ticker, window):
         return f"An error occurred: {e}"
 
 def calculate_EMA(ticker, window):
+    """
+    Calculate the exponential moving average for a given stock ticker and a window.
+
+    Parameters:
+        ticker (str): The stock ticker symbol for a company (e.g., AAPL for Apple).
+        window (int): The timeframe to consider when calculating the EMA.
+
+    Returns:
+        str: The calculated EMA as a string.
+             If an error occurs, it returns an error message.
+    """
     try:
         data = yf.Ticker(ticker).history(period='1y').Close
         return str(data.ewm(span=window,adjust=False).mean().iloc[-1])
@@ -36,6 +69,16 @@ def calculate_EMA(ticker, window):
         return f"An error occurred: {e}"
 
 def calculate_RSI(ticker):
+    """
+    Calculate the RSI (Relative Strength Index) for a given stock ticker.
+
+    Parameters:
+        ticker (str): The stock ticker symbol for a company (e.g., AAPL for Apple).
+
+    Returns:
+        str: The calculated RSI as a string.
+             If an error occurs, it returns an error message.
+    """
     try:
         data = yf.Ticker(ticker).history(period='1y').Close
         delta = data.diff()
@@ -49,6 +92,16 @@ def calculate_RSI(ticker):
         return f"An error occurred: {e}"
 
 def calculate_MACD(ticker):
+    """
+    Calculate the MACD (Moving Average Convergence Divergence) for a given stock ticker.
+
+    Parameters:
+        ticker (str): The stock ticker symbol for a company (e.g., AAPL for Apple).
+
+    Returns:
+        str: A string containing the MACD, signal, and MACD histogram values separated by commas.
+             If an error occurs, it returns an error message.
+    """
     try:
         data = yf.Ticker(ticker).history(period='1y').Close
         short_EMA = data.ewm(span=12, adjust=False).mean()
